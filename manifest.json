@@ -1,0 +1,26 @@
+{
+    "manifest_version": 2,
+    "name": "BaHa pip video player",
+    "version": "1.0",
+    "description": "FireFox 巴哈姆特動畫瘋 馬拉松的時候沒有廣告",
+    
+    "content_scripts": [
+      {
+        "matches":  ["*://ani.gamer.com.tw/animeVideo.php?sn=*","https://www.google.com/*"],
+        "js": ["content.js"]
+      }
+    ],
+    "background":{
+      "scripts": ["background.js"]
+    },
+    "permissions": [
+      "webRequest",
+      "webRequestBlocking",
+      "webRequestFilterResponse.serviceWorkerScript",
+      "<all_urls>",
+      "tabs",
+      "activeTab",
+      "contextMenus",
+      "storage"
+    ]
+  }
