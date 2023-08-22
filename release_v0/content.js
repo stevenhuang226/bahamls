@@ -30,7 +30,7 @@ async function getEpiscode() {
     let episcodeHTML = document.getElementsByClassName('season')[0].innerHTML;
     let episcodeList = [];
     let posit = episcodeHTML.indexOf('href="?sn=',0);
-    return new Promise( async(resolve,reject) => {
+    return new Promise( async(resolve) => {
         keepWhile = true;
         while ( posit != -1) {
             episcodeList.push(
@@ -71,8 +71,6 @@ async function sendVideoCastEnd(url) {
         }
     )
     fetch(requestObject)
-    .then( response => {
-    })
     .catch( error => {
         console.log('sendVideoCastEnd error: ',error);
     })

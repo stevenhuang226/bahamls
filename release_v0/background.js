@@ -31,10 +31,6 @@ async function messageListener(message,sender,sendResponse){
     if (message.type == 'episcodeInfo') {
         await Object.assign(tabInfo[tabId], {tabEpiscodeInfo: message.episcodeInfo});
         await Object.assign(tabInfo[tabId], {tabAnimeName: message.animeName});
-        /*
-        getAdStartS(tabId);
-        /* */
-        /*localStorage.setItem([message.animeName],JSON.stringify(message.episcodeInfo)); /* */
     }
     if (message.type == 'needReload') {
         browser.tabs.reload(tabId);
@@ -91,7 +87,6 @@ async function waitCreatNewTab(tabId) {
                 browser.webRequest.onBeforeRequest.removeListener(listener);
             }
         })
-        // 獲取警告觸發檔案名
     })
     .then(fileName => {
         let alertUrl = 'https://bahamut.akamaized.net/*/'+fileName;
@@ -127,7 +122,6 @@ async function waitCreatNewTab(tabId) {
                 });
             }
         }
-        // 設定監聽器監聽警告檔案名
         browser.webRequest.onCompleted.addListener(createTabListener,{urls:[alertUrl],tabId:tabId});
         browser.tabs.onUpdated.addListener(async (tab_id,changeInfo,tab) => {
             if (tab_id == tabId && changeInfo.status == 'loading') {
