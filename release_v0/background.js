@@ -3,9 +3,7 @@ var tabInfo = {};
 // tab listener
 browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (/^https:\/\/ani\.gamer\.com\.tw\/animeVideo\.php\?sn=.*/.test(changeInfo.url) && changeInfo.status == 'loading') {
-        console.log('tab actived');
         tabInfo[tabId] = tabInfo[tabId] ?? {};
-        console.log(tabInfo[tabId]);
         waitCreatNewTab(tabId);
         getAdStartS(tabId);
     }
@@ -14,7 +12,6 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 browser.tabs.onRemoved.addListener(async (tabId, removeInfo) => {
     if (tabId in tabInfo) {
         delete tabInfo[tabId];
-        console.log('刪除數據：', tabId);
     }
 }) /* */
 // message listener
@@ -23,7 +20,6 @@ async function messageListener(message,sender,sendResponse){
     if (message.type === 'tabActive') {
         return new Promise(resolve => {
             tabInfo[tabId] = tabInfo[tabId] ?? {};
-            console.log(tabId,'loaded');
             resolve();
         })
         .then( () => {
@@ -61,11 +57,9 @@ async function getAdStartS(tabId) {
     .then(　([codeSInfo,videoCastUrl]) => {
         Object.assign(tabInfo[tabId],{'adSCode': codeSInfo});
         Object.assign(tabInfo[tabId], {'videoCastUrl': videoCastUrl});
-        console.log(tabId,'獲取videocasturl',videoCastUrl);
     })
 }
 async function waitCreatNewTab(tabId) {    
-    console.log('waitCreatNewTab監聽介入'); // test
     return new Promise( (resolve) => {
         async function listener(details) {
             const responseBody = browser.webRequest.filterResponseData(details.requestId);
@@ -102,7 +96,6 @@ async function waitCreatNewTab(tabId) {
     .then(fileName => {
         let alertUrl = 'https://bahamut.akamaized.net/*/'+fileName;
         function createTabListener(details) {
-            console.log('監聽到檔名：',details.url);
             createTab();
             browser.webRequest.onCompleted.removeListener(createTabListener);
         }
@@ -117,10 +110,8 @@ async function waitCreatNewTab(tabId) {
                 })
                 .then( async createdTab => {
                     setTimeout( () => {
-                        console.log('debug 001 注入代碼', createdTab.id);
                         browser.tabs.executeScript(createdTab.id,{
-                            code: `console.log("click button script loaded");
-                                const the_button = document.getElementById("adult");
+                            code: `const the_button = document.getElementById("adult");
                                 if (the_button) {
                                     the_button.click();
                                 }
