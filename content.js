@@ -17,16 +17,11 @@ async function browserMessageListener() {
                 browser.runtime.sendMessage({type: 'episcodeInfo', episcodeInfo: episcodeInfo, animeName: animeName});
             });
         }
-        if (message.type == 'adStartRequest') {
-            console.log('get ad start request url');
-            let adStartRequest = new Request(
-                message.url,
-                {method: 'GET'}
-            );
-            fetch (adStartRequest)
-            .catch( error => {
-                console.log('sned ad start request error',error);
-            });
+        if (message.type == 'adEnd') {
+            sendVideoCastEnd(message.url);
+            setTimeout( () => {
+                browser.runtime.sendMessage({type: 'needReload'});
+            },1000)
         }
     }/* */ 
     browser.runtime.onMessage.addListener(listener);
@@ -68,4 +63,30 @@ async function getEpiscode() {  //ok
 async function getAnimeName() {     //ok
     animeNameOrigin = document.getElementsByClassName('anime_name')[0].innerText;
     return(animeNameOrigin.substring(0,animeNameOrigin.indexOf('[')));
+}
+async function sendVideoCastEnd(url) {
+    let requestObject = new Request(
+        url,{
+            method: 'GET',
+            mode: 'cors'
+        }
+    )
+    fetch(requestObject)
+    .then( response => {
+        console.log(response);
+    })
+    .catch( error => {
+        console.log('sendVideoCastEnd error: ',error);
+    })
+}
+async function clickVideoCastButton() {
+    const videoCastButton = document.getElementById('adult');
+    if (videoCastButton) {
+        console.log('click the video cast button');
+        videoCastButton.click();
+    }
+    else {
+        console.log('click video cast button error',videoCastButton);
+        browser.runtime.sendMessage({type: 'debug', debug: 'click video cast button error'})
+    }
 }
