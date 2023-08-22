@@ -6,10 +6,6 @@ browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         console.log('tab actived');
         tabInfo[tabId] = tabInfo[tabId] ?? {};
         console.log(tabInfo[tabId]);
-        /*
-        DeviceIdRequestHeader(tabId);
-        getDeviceId(tabId);
-        /* */
         waitCreatNewTab(tabId);
         getAdStartS(tabId);
     }
@@ -135,17 +131,3 @@ async function waitCreatNewTab(tabId) {
         browser.webRequest.onCompleted.addListener(createTabListener,{urls:[alertUrl],tabId:tabId});
     })
 }
-async function timeNewTab(playingTabId,animeName) {
-    /*
-    let playingSncode;
-    if (playingTabId.url.indexOf('#') == true) {
-        playingSncode = playingTabId.url.substring(playingTabId.url.indexOf('sn=')+3,playingTabId.url.indexOf('#')-1);
-    }
-    else {
-        playingSncode = playingTabId.url.substring(playingTabId.url.indexOf('sn=')+3,-1);
-    }/* */
-    episcodeInfo = await JSON.parse(localStorage.getItem(animeName));
-    let alertRequestName = await getM3u8Alert(playingTabId);
-}
-
-// ad start 裡面的s直接用之前的加上去，直接搞個數字就行，不管那麼多
